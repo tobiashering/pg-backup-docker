@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#MISE description="Check repository formatting with Prettier"
+#USAGE flag "-f --fix" help="Format files with Prettier"
+
+set -euo pipefail
+
+if [ "${usage_fix:-false}" = "true" ]; then
+  prettier --write "**/*.{md,yml,yaml,json}"
+else
+  prettier --check "**/*.{md,yml,yaml,json}"
+fi

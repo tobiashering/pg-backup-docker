@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#MISE description="Run all lint tasks"
+#USAGE flag "-f --fix" help="Automatically fix supported issues"
+
+set -euo pipefail
+
+ARGS=()
+
+if [ "${usage_fix:-false}" = "true" ]; then
+  ARGS+=("--fix")
+fi
+
+mise run lint:prettier "${ARGS[@]}"
+mise run lint:shellcheck

@@ -7,48 +7,40 @@ on:
     branches: [main, master, develop]
 
 jobs:
-  prettier:
-    name: Prettier
+  lint:
+    name: Linters
     runs-on: ubuntu-latest
+    env:
+      MISE_TASK_RUN_AUTO_INSTALL: "false"
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+      - name: Install lint tools
+        uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
-          node-version: 24
+          install_args: node bun npm:prettier aqua:koalaman/shellcheck
 
-      - name: Install Prettier
-        run: npm install -g prettier@3.9.4
+      - name: Run linters
+        run: mise lint --fix
 
-      - name: Run Prettier
-        run: prettier --check "**/*.{md,yml,yaml,json}"
+      - name: Verify linters produced no changes
+        run: git diff --exit-code
 
   commitlint:
     name: Commitlint
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    env:
+      MISE_TASK_RUN_AUTO_INSTALL: "false"
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+      - name: Setup Mise
+        uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
-          node-version: 24
-
-      - name: Install commitlint
-        run: npm install -g commitlint@21.2.1
+          install_args: node bun npm:commitlint
 
       - name: Validate PR commits
-        run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
-
-  shellcheck:
-    name: ShellCheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-
-      - name: Run ShellCheck
-        run: |
-          cd scripts
-          shellcheck -x *.sh
+        run: mise lint:commit ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
