@@ -2,13 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:best-practices"],
   "timezone": "Europe/Berlin",
-  "schedule": ["before 6am"],
   "automerge": true,
   "packageRules": [
     {
-      "description": "Disable auto-merge for major updates",
-      "automerge": false,
-      "matchUpdateTypes": ["major", "replacement"]
+      "description": "Disable auto-merge for major updates and replacement packages",
+      "matchUpdateTypes": ["major", "replacement"],
+      "automerge": false
     },
     {
       "description": "Add renovate label to all updates by default",
@@ -36,10 +35,25 @@
       "addLabels": ["digest"]
     },
     {
-      "description": "Docker updates",
+      "description": "Label PostgreSQL updates",
+      "matchPackageNames": ["pgautoupgrade/pgautoupgrade", "postgres"],
+      "addLabels": ["postgres"]
+    },
+    {
+      "description": "Docker",
       "matchDatasources": ["docker"],
       "addLabels": ["docker"],
       "pinDigests": true
+    },
+    {
+      "description": "GitHub actions",
+      "matchManagers": ["github-actions"],
+      "addLabels": ["ci"]
+    },
+    {
+      "description": "Mise tools",
+      "matchManagers": ["mise"],
+      "addLabels": ["mise"]
     },
     {
       "groupName": "Docker digest pins",
@@ -47,37 +61,11 @@
       "matchUpdateTypes": ["pinDigest"]
     },
     {
-      "groupName": "Docker digest updates",
-      "matchDatasources": ["docker"],
-      "matchUpdateTypes": ["digest"]
-    },
-    {
-      "groupName": "PostgreSQL major updates",
-      "matchPackageNames": ["/postgres/", "/pgautoupgrade/"],
-      "matchUpdateTypes": ["major"],
-      "addLabels": ["postgresql"],
-      "enabled": false
-    },
-    {
-      "description": "Group non-major PostgreSQL updates",
-      "groupName": "PostgreSQL non-major updates",
-      "matchPackageNames": ["/postgres/", "/pgautoupgrade/"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "addLabels": ["postgresql"]
-    },
-    {
-      "groupName": "Linters and formatters",
-      "matchPackageNames": ["commitlint ", "prettier"],
-      "addLabels": ["linters"]
-    },
-    {
-      "groupName": "GitHub Actions",
-      "matchManagers": ["github-actions"],
-      "addLabels": ["ci"]
-    },
-    {
-      "groupName": "node",
-      "matchPackageNames": ["node"]
+      "description": "Renovate",
+      "groupName": "Renovate",
+      "matchPackageNames": ["renovate", "ghcr.io/renovatebot/renovate"],
+      "addLabels": ["renovate"],
+      "schedule": "* 3-5 * * 1"
     },
     {
       "description": "Do not pin digests for docker-compose and custom regex managers",
@@ -92,14 +80,6 @@
       "matchStrings": ["postgres_version:\\s*\"(?<currentValue>[^\"]*)\""],
       "depNameTemplate": "postgres",
       "datasourceTemplate": "docker"
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
-      "matchStrings": [
-        "npm install -g (?<depName>[a-z0-9-]+)@(?<currentValue>[0-9.]+)"
-      ],
-      "datasourceTemplate": "npm"
     }
   ]
 }
