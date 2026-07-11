@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Lint shell scripts with ShellCheck"
+
+set -euo pipefail
+
+cd scripts
+shellcheck -x ./*.sh
