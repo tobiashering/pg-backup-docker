@@ -32,13 +32,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - postgres_version: "18.4-alpine3.23"
+          - postgres_version: "18.4-alpine"
             is_latest: true
-          - postgres_version: "17.10-alpine3.23"
+          - postgres_version: "17.10-alpine"
             is_latest: false
-          - postgres_version: "16.14-alpine3.23"
+          - postgres_version: "16.14-alpine"
             is_latest: false
-          - postgres_version: "15.18-alpine3.23"
+          - postgres_version: "15.18-alpine"
             is_latest: false
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
@@ -64,10 +64,9 @@ jobs:
           VERSION="${{ matrix.postgres_version }}"
           MAJOR_MINOR=$(echo $VERSION | grep -oE '^[0-9]+\.[0-9]+')
           MAJOR=$(echo $MAJOR_MINOR | cut -d. -f1)
-          ALPINE_VERSION=$(echo $VERSION | grep -oE 'alpine[0-9]+\.[0-9]+')
           BASE="${{ env.REGISTRY }}/${{ steps.image_name.outputs.name }}"
 
-          TAGS=("${MAJOR}" "${MAJOR_MINOR}" "${MAJOR}-alpine" "${MAJOR_MINOR}-alpine" "${MAJOR}-${ALPINE_VERSION}" "${MAJOR_MINOR}-${ALPINE_VERSION}")
+          TAGS=("${MAJOR}" "${MAJOR_MINOR}" "${MAJOR}-alpine" "${MAJOR_MINOR}-alpine")
 
           if [ "${{ matrix.is_latest }}" = "true" ]; then
             TAGS+=("latest" "alpine")
