@@ -71,6 +71,13 @@
       "description": "Do not pin digests for docker-compose and custom regex managers",
       "matchManagers": ["docker-compose", "custom.regex"],
       "pinDigests": false
+    },
+    {
+      "description": "Do not update postgres for custom regex managers",
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": ["postgres"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ],
   "customManagers": [
