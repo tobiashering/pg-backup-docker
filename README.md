@@ -1,6 +1,7 @@
 # postgres-backup-docker
 
-A simple Docker container for backing up and restoring PostgreSQL databases using `pg_dump` on a cron schedule.
+A simple Docker container for backing up and restoring PostgreSQL databases
+using `pg_dump` on a cron schedule.
 
 ## Environment Variables
 
