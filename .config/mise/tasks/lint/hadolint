@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#MISE description="Lint Dockerfiles with Hadolint"
+
+set -euo pipefail
+
+hadolint Dockerfile

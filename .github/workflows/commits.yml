@@ -1,0 +1,27 @@
+name: Commits
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  MISE_TASK_RUN_AUTO_INSTALL: "false"
+
+jobs:
+  commitlint:
+    name: Commitlint
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Setup Mise
+        uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
+        with:
+          install_args: bun npm:commitlint
+
+      - name: Run commitlint
+        run: mise lint:commit ${{ github.event.pull_request.base.sha }} ${{ github.sha }}

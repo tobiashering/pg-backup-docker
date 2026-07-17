@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#MISE description="Run all lint tasks"
+#MISE description="Lint Markdown files in the project"
 #USAGE flag "-f --fix" help="Automatically fix supported issues"
 
 set -euo pipefail
@@ -10,7 +10,4 @@ if [ "${usage_fix:-false}" = "true" ]; then
   ARGS+=("--fix")
 fi
 
-mise run lint:prettier "${ARGS[@]}"
-mise run lint:markdown "${ARGS[@]}"
-mise run lint:hadolint
-mise run lint:shellcheck
+markdownlint-cli2 "${ARGS[@]}" .

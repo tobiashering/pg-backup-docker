@@ -2,45 +2,75 @@ name: Lint
 
 on:
   push:
-    branches: [main, master, develop]
+    branches:
+      - main
   pull_request:
-    branches: [main, master, develop]
+    branches:
+      - main
+
+env:
+  MISE_TASK_RUN_AUTO_INSTALL: "false"
 
 jobs:
-  lint:
-    name: Linters
-    runs-on: ubuntu-latest
-    env:
-      MISE_TASK_RUN_AUTO_INSTALL: "false"
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Install lint tools
         uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
         with:
-          install_args: node bun npm:prettier aqua:koalaman/shellcheck
+          install_args: bun npm:prettier
 
-      - name: Run linters
-        run: mise lint --fix
+      - name: Run linter
+        run: mise lint:prettier --fix
 
       - name: Verify linters produced no changes
         run: git diff --exit-code
 
-  commitlint:
-    name: Commitlint
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    env:
-      MISE_TASK_RUN_AUTO_INSTALL: "false"
+  markdown:
+    name: Markdown
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-        with:
-          fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - name: Setup Mise
+      - name: Install lint tools
         uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
         with:
-          install_args: node bun npm:commitlint
+          install_args: bun npm:markdownlint-cli2
 
-      - name: Validate PR commits
-        run: mise lint:commit ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
+      - name: Run linter
+        run: mise lint:markdown
+
+  hadolint:
+    name: Hadolint
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Install lint tools
+        uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
+        with:
+          install_args: aqua:hadolint/hadolint
+
+      - name: Run linter
+        run: mise lint:hadolint
+
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Install lint tools
+        uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4.2.1
+        with:
+          install_args: aqua:koalaman/shellcheck
+
+      - name: Run linter
+        run: mise lint:shellcheck
