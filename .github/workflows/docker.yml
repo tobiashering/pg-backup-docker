@@ -34,7 +34,7 @@ jobs:
         include:
           - postgres_version: "18.4-alpine"
             is_latest: true
-          - postgres_version: "17.10-alpine"
+          - postgres_version: "17.11-alpine"
             is_latest: false
           - postgres_version: "16.15-alpine"
             is_latest: false
