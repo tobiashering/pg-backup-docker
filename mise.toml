@@ -4,7 +4,7 @@ min_version = "2026.6.1"
 npm.bun = true
 
 [tools]
-node = "24.19.0"
+node = "24.20.0"
 bun = "1.4.0"
 "aqua:hadolint/hadolint" = "2.15.1"
 "aqua:koalaman/shellcheck" = "0.11.0"
