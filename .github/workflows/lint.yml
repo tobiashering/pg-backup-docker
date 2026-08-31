@@ -22,7 +22,7 @@ jobs:
       - name: Install lint tools
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
-          version: 2026.8.15
+          version: 2026.8.16
           install_args: node bun npm:prettier
 
       - name: Run linter
@@ -41,7 +41,7 @@ jobs:
       - name: Install lint tools
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
-          version: 2026.8.15
+          version: 2026.8.16
           install_args: node bun npm:markdownlint-cli2
 
       - name: Run linter
@@ -57,7 +57,7 @@ jobs:
       - name: Install lint tools
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
-          version: 2026.8.15
+          version: 2026.8.16
           install_args: aqua:hadolint/hadolint
 
       - name: Run linter
@@ -73,7 +73,7 @@ jobs:
       - name: Install lint tools
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
-          version: 2026.8.15
+          version: 2026.8.16
           install_args: aqua:koalaman/shellcheck
 
       - name: Run linter
